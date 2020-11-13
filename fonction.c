@@ -76,26 +76,11 @@ void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_
                 printf("Erreur de mot de passe\n");
                 break;
             }
-        case 1:
-            printf("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-            saisie_DT_Obj(donnee, mail_utilisateur);
+
+            case 1:
+            printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
+            saisie_DT_Obj(donnee,mail_utilisateur,repertoire,&recherche,nomrech);
             //cherche_dans_un_fichier(donnee);
-            break;
-        default:
-            break;
-        }
-        }while (i != 0);
-        break;
-    }
-    else
-    {
-        printf ("Erreur de mot de passe\n");
-        break;
-    }
-    case 1:
-    printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-    saisie_DT_Obj(donnee,mail_utilisateur,repertoire,recherche,nomrech);
-    //cherche_dans_un_fichier(donnee);
         break;
     default : break;
     }
@@ -239,7 +224,6 @@ void supprimer_mot_clef(FILE * fichier)
 
 void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,int *recherche,char *nomrech)
 {
-    FILE *repertoire = NULL;
     printf ("Veuillez saisir votre adresse mail : \n");
     getchar (); //vider le buffer
     fgets(mail_utilisateur->EM,60,stdin);
@@ -251,7 +235,6 @@ void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,int *r
     fgets (mail_utilisateur->CORPS,1000,stdin);
     donne=fopen("donne.txt","a+");
     fprintf(donne,"\n%s \n%s \n%s \n%s",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
-    fprintf(donne, "Le Monsieur qui utilise le programme");
     printf ("%s\n",mail_utilisateur->EM);
     strcpy(nomrech, mail_utilisateur->EM);
     *recherche=rechercher_EM(repertoire,nomrech);
