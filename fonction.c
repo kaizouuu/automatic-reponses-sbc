@@ -52,6 +52,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_
                         *recherche = rechercher_personne(repertoire, nomrech);
                         break;
                     case 4:
+                        supprimer_personne(repertoire);
                         break;
                     case 5:
                         ajout_mot_clef(mot_clef); //Pas besoin de mettre &tab_mot_clef
@@ -261,6 +262,39 @@ int rechercher_personne(FILE *repertoire, char *nomrech)
     }
     return trouve;
 }
+
+void supprimer_personne(FILE * repertoire)
+{
+    PERS p;
+    char mot_a_supprimer[60];
+    int indicateur=0;
+    printf("\n\nEntrez le mot à supprimer : ");
+    scanf("%s", mot_a_supprimer);
+    repertoire=fopen("repertoire.txt","a+");
+    fseek(repertoire, 0, SEEK_SET);
+    FILE * repertoire_temp=NULL;
+    repertoire_temp=fopen("temp.txt","w+");
+
+    while (fscanf(repertoire,"%s %s %s %s", p.NOM, p.PRENOM, p.AdresseMail,p.Classement) !=EOF)
+    {
+        if (strcmp(p.NOM,mot_a_supprimer)!=0)
+        {
+            fprintf(repertoire_temp, "\n%-20s %10s %10s %10s", p.NOM,p.PRENOM,p.AdresseMail,p.Classement);
+        }
+        else
+        {
+            indicateur=1;
+        }
+    }
+    if(indicateur==0)
+        printf("\nErreur: Ce mot-clef n'existe pas.\n");
+    fclose(repertoire);
+    fclose(repertoire_temp);
+    remove("repertoire.txt");
+    rename("temp.txt","repertoire.txt");
+
+}
+
 int rechercher_EM(FILE *repertoire, char *nomrech)
 {
     int trouve=0;
