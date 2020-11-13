@@ -1,1 +1,9 @@
+.vscode/
+cmake-build-debug/
+.idea/
 Prog
+
+*.o
+*.txt
+
+main.exe

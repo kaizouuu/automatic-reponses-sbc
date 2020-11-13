@@ -76,15 +76,15 @@ void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_
                 printf("Erreur de mot de passe\n");
                 break;
             }
-        case 1:
-            printf("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-            saisie_DT_Obj(donnee, mail_utilisateur);
+
+            case 1:
+            printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
+            saisie_DT_Obj(donnee,mail_utilisateur,repertoire,&recherche,nomrech);
             //cherche_dans_un_fichier(donnee);
-            break;
-        default:
-            break;
-        }
-    } while (i != 0);
+        break;
+    default : break;
+    }
+    }while (i != 0);
 }
 
 void saisir_repertoire(FILE *repertoire, PERS *p)
@@ -115,30 +115,47 @@ void affichage_repertoire(FILE *repertoire)
 
 void ajout_mot_clef(FILE *fichier) //Fonction ajoutant un seul mot clef
 {
-    MOT_CLEF tab_mot_clef;
-    printf("Veuillez saisir le mot-clef à ajouter: ");
-    scanf("%s", tab_mot_clef.mot);
-    printf("Veuillez saisir l'annexe de votre mot-clef à ajouter: ");
-    scanf("%d", &tab_mot_clef.annexe_mot);
-    fichier = fopen("mot_clef.txt", "a+");
-    fprintf(fichier, "\n%-20s\t%d ", tab_mot_clef.mot, tab_mot_clef.annexe_mot);
+	MOT_CLEF tab_mot_clef;
+	printf("Veuillez saisir le mot-clef à ajouter: ");
+	scanf("%s",tab_mot_clef.mot);
+	printf("\nVeuillez saisir l'annexe de votre mot-clef à ajouter: ");
+	scanf("%d",&tab_mot_clef.annexe_mot);
+	fichier=fopen("mot_clef.txt","a+");
+	fprintf(fichier,"\n%-20s\t%d ",tab_mot_clef.mot, tab_mot_clef.annexe_mot);
     fclose(fichier);
 }
-void afficher_mot_clef(FILE *fichier) //Afficher tous les mots-clefs présents dans le fichier mot_clef.txt
-{
-    char car;
-    fichier = fopen("mot_clef.txt", "a+");
+void afficher_mot_clef(FILE * fichier) //Afficher tous les mots-clefs présents dans le fichier mot_clef.txt
+{	
+	//***On réorganise le fichier et on le rend plus jolie***
+	MOT_CLEF p;
+	fichier=fopen("mot_clef.txt","a+");
+	fseek(fichier, 0, SEEK_SET);
+	FILE * fichier_temp=NULL;
+	fichier_temp=fopen("temp.txt","w+");
+	
+	while (fscanf(fichier,"%s %d", p.mot, &p.annexe_mot) !=EOF)
+		fprintf(fichier_temp, "\n%-20s %10d", p.mot, p.annexe_mot);
+		
+	fclose(fichier);
+	fclose(fichier_temp);
+	remove("mot_clef.txt");
+	rename("temp.txt","mot_clef.txt");
+	
+	//***Affichage du fichier caractère par caractère***
+	char car;
+	fichier=fopen("mot_clef.txt","a+");
 
     printf("\n\nAffichage des mots clefs: \n");
 
     car = fgetc(fichier);
-    while (car != EOF) //Tant que le caractère lu n'est pas la fin du fichier, on continue de l'afficher
-    {
-        printf("%c", car);
-        car = fgetc(fichier);
-    }
-    fclose(fichier);
-    printf("\n\n");
+	while (car != EOF)    //Tant que le caractère lu n'est pas la fin du fichier, on continue de l'afficher
+	{
+		printf ("%c", car);
+		car = fgetc(fichier);
+	}
+	fclose(fichier);
+	printf("\n\n");
+	
 }
 
 void recherche_mot_clef(FILE *fichier)
@@ -149,96 +166,79 @@ void recherche_mot_clef(FILE *fichier)
 	 * On effectue la comparaision et on affiche si nécessaire
 	 */
     MOT_CLEF p;
-    char mot_recherche[60];
-    int indicateur = 0;
-    printf("\n\nEntrez le mot recherché : ");
-    scanf("%s", mot_recherche);
-    fichier = fopen("mot_clef.txt", "a+");
-    fseek(fichier, 0, SEEK_SET);
-    while (fscanf(fichier, "%s %d", p.mot, &p.annexe_mot) != EOF)
-    {
-        if (strcmp(p.mot, mot_recherche) == 0)
-        {
-            printf("\nMot-clef: %s\tAnnexe: %d\n", p.mot, p.annexe_mot);
-            indicateur = 1;
-        }
-    }
-    if (indicateur == 0)
-        printf("Erreur: Ce mot-clef n'existe pas.");
-    fclose(fichier);
-
-    /*char mot_a_supprimer[60];
-	fichier = fopen ("mot_clef.txt","r+");	
-	printf("Chargement des éléments du fichier dans une structure et affichage à partir de la structure");
-	for(int i=0;i<TMAX;i++){
-	while(fscanf(fichier," %s %d", tableau[i].mot, &tableau[i].annexe_mot) !=EOF)//Je charge mon fichier (mot clef et entier associé) dans ma structure
-		printf("\n%-20s et %10d", tableau[i].mot, tableau[i].annexe_mot); //Je print à partir de ma structure
-	}
+	char mot_recherche[60];
+	int indicateur=0;
+	printf("\n\nEntrez le mot recherché : ");
+	scanf("%s", mot_recherche);
+	fichier=fopen("mot_clef.txt","a+");
+	fseek(fichier, 0, SEEK_SET);
+	while (fscanf(fichier,"%s %d", p.mot, &p.annexe_mot) !=EOF)
+		{
+				
+            if (strcmp(p.mot,mot_recherche)==0)
+			{
+				printf("\nMot-clef: %s\tAnnexe: %d\n",p.mot,p.annexe_mot);
+				indicateur=1;
+			}
+		}
+	if(indicateur==0)
+		printf("\nErreur: Ce mot-clef n'existe pas.\n");
 	fclose(fichier);
 	
 	
-	printf("\n\nEntrez le mot à supprimer : ");
-	scanf("%s", &mot_a_supprimer[0]);
-	printf("OK");
-	
+}
+
+void supprimer_mot_clef(FILE * fichier)
+{
+	MOT_CLEF p;
+	char mot_a_supprimer[60];
 	int indicateur=0;
-	int indicateur2=0;
-	printf("OK");
+	printf("\n\nEntrez le mot à supprimer : ");
+	scanf("%s", mot_a_supprimer);
+	fichier=fopen("mot_clef.txt","a+");
+	fseek(fichier, 0, SEEK_SET);
+	FILE * fichier_temp=NULL;
+	fichier_temp=fopen("temp.txt","w+");
 	
-	for(int a=0; a<TMAX; a++)
-	{
-		printf("OK");
-		if(strcmp(tableau[a].mot, mot_a_supprimer)==0)
+	while (fscanf(fichier,"%s %d", p.mot, &p.annexe_mot) !=EOF)
 		{
-			printf("Trouvé!");
-			indicateur=1;
-			indicateur2=a;
-			break;
+            if (strcmp(p.mot,mot_a_supprimer)!=0)
+			{
+				fprintf(fichier_temp, "\n%-20s %10d", p.mot, p.annexe_mot);
+			}
+			else
+			{
+				indicateur=1;
+			}	
 		}
-	}
-	
 	if(indicateur==0)
-		printf("Ce mot n'existe pas!");
-	else
-	{
-		for(int t=indicateur2; t<TMAX; t++)		
-		{
-			strcpy(tableau[t].mot, tableau[t+1].mot);
-			tableau[t].annexe_mot = tableau[t+1].annexe_mot;
-		}	
-	}	
-	
-	printf("\n\n Affichage du contenu de la structure MOT: \n");*/
+		printf("\nErreur: Ce mot-clef n'existe pas.\n");
+	fclose(fichier);
+	fclose(fichier_temp);
+	remove("mot_clef.txt");
+	rename("temp.txt","mot_clef.txt");
 
-    /*for(int i=0; i<TAILLE-1; i++)
-	{
-	printf("%5d", tableau[i].indexe);
-	printf("%20s\n", tableau[i].mot);
-	}*/
 }
 
-void supprimer_mot_clef(FILE *fichier)
-{
-}
 
-void saisie_DT_Obj(FILE *donne, DONNEE *mail_utilisateur)
+
+void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,int *recherche,char *nomrech)
 {
-    int recherche;
-    FILE *repertoire = NULL;
-    printf("Veuillez saisir votre adresse mail : \n");
-    getchar(); //vide le buffer
-    fgets(mail_utilisateur->EM, 60, stdin);
-    printf("Veuillez saisir l'asresse mail de votre destinataire : \n");
-    fgets(mail_utilisateur->DT, 60, stdin);
-    printf("Entrez l'objet du mail : \n");
-    fgets(mail_utilisateur->OBJ, 60, stdin);
-    printf("Entrez le message : \n");
-    fgets(mail_utilisateur->CORPS, 1000, stdin);
-    donne = fopen("donne.txt", "a+");
-    fprintf(donne, "\n%s \n%s \n%s \n%s", mail_utilisateur->EM, mail_utilisateur->DT, mail_utilisateur->OBJ, mail_utilisateur->CORPS);
-    fprintf(donne, "Le Monsieur qui utilise le programme");
-    printf("%s", mail_utilisateur->EM);
-    recherche = rechercher_EM(repertoire, mail_utilisateur->EM);
+    printf ("Veuillez saisir votre adresse mail : \n");
+    getchar (); //vider le buffer
+    fgets(mail_utilisateur->EM,60,stdin);
+    printf ("Veuillez saisir l'asresse mail de votre destinataire : \n");
+    fgets (mail_utilisateur->DT,60,stdin);
+    printf ("Entrez l'objet du mail : \n");
+    fgets (mail_utilisateur->OBJ,60,stdin);
+    printf ("Entrez le message : \n");
+    fgets (mail_utilisateur->CORPS,1000,stdin);
+    donne=fopen("donne.txt","a+");
+    fprintf(donne,"\n%s \n%s \n%s \n%s",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
+    printf ("%s\n",mail_utilisateur->EM);
+    strcpy(nomrech, mail_utilisateur->EM);
+    *recherche=rechercher_EM(repertoire,nomrech);
+    printf("%d",recherche);
     fclose(donne);
 }
 int rechercher_personne(FILE *repertoire, char *nomrech)
@@ -263,22 +263,21 @@ int rechercher_personne(FILE *repertoire, char *nomrech)
 }
 int rechercher_EM(FILE *repertoire, char *nomrech)
 {
-    int trouve = 0;
+    int trouve=0;
     char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
     PERS p;
-    repertoire = fopen("repertoire.txt", "a+");
+    repertoire=fopen("repertoire.txt","a+");
     fseek(repertoire, 0, SEEK_SET);
-    while (fscanf(repertoire, "%s %s %s %s", p.NOM, p.PRENOM, p.AdresseMail, classement_temp) != EOF)
+    while (fscanf(repertoire,"%s %s %s %s", p.NOM, p.PRENOM,p.AdresseMail, classement_temp) !=EOF)
     {
-        if (strcmp(p.AdresseMail, nomrech) == 0)
+        if (strcmp(p.AdresseMail,nomrech)==0)
         {
-            strcpy(p.Classement, classement_temp);
+            strcpy(p.Classement,classement_temp);
             printf("\nAffichage de la structure: Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
-            trouve = (strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
+            trouve=(strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
             fclose(repertoire);
             return trouve;
         }
     }
-    fclose(repertoire);
     return trouve;
 }
