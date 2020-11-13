@@ -74,7 +74,7 @@ void menu(FILE *repertoire,FILE *donnee,FILE *mot_clef,PERS *p,DONNEE *mail_util
     }
     case 1:
     printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-    saisie_DT_Obj(donnee, mail_utilisateur);
+    saisie_DT_Obj(donnee,mail_utilisateur,repertoire,recherche,nomrech);
     //cherche_dans_un_fichier(donnee);
         break;
     default : break;
@@ -223,20 +223,25 @@ void supprimer_mot_clef(FILE * fichier)
 
 
 
-void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur)
+void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,int *recherche,char *nomrech)
 {
-        printf ("Veuillez saisir votre adresse mail : \n");
-            fgets(mail_utilisateur->EM,60,stdin);
-            printf ("Veuillez saisir l'asresse mail de votre destinataire : \n");
-            fgets (mail_utilisateur->DT,60,stdin);
-            printf ("Entrez l'objet du mail : \n");
-            fgets (mail_utilisateur->OBJ,60,stdin);
-            printf ("Entrez le message : \n");
-            fgets (mail_utilisateur->CORPS,1000,stdin);
-            donne=fopen("donne.txt","a+");
-            fprintf(donne,"\n%s \n%s \n%s \n%s",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
-            fprintf(donne, "Le Monsieur qui utilise le programme");
-            fclose(donne);
+    printf ("Veuillez saisir votre adresse mail : \n");
+    getchar (); //vider le buffer
+    fgets(mail_utilisateur->EM,60,stdin);
+    printf ("Veuillez saisir l'asresse mail de votre destinataire : \n");
+    fgets (mail_utilisateur->DT,60,stdin);
+    printf ("Entrez l'objet du mail : \n");
+    fgets (mail_utilisateur->OBJ,60,stdin);
+    printf ("Entrez le message : \n");
+    fgets (mail_utilisateur->CORPS,1000,stdin);
+    donne=fopen("donne.txt","a+");
+    fprintf(donne,"\n%s \n%s \n%s \n%s",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
+    fprintf(donne, "Le Monsieur qui utilise le programme");
+    printf ("%s\n",mail_utilisateur->EM);
+    strcpy(nomrech, mail_utilisateur->EM);
+    *recherche=rechercher_EM(repertoire,nomrech);
+    printf("%d",recherche);
+    fclose(donne);
 }
 int rechercher_personne(FILE *repertoire, char *nomrech)
 {
@@ -258,5 +263,26 @@ int rechercher_personne(FILE *repertoire, char *nomrech)
 		}
 	return trouve;
 }
+int rechercher_EM(FILE *repertoire, char *nomrech)
+{
+    int trouve=0;
+    char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
+    PERS p;
+    repertoire=fopen("repertoire.txt","a+");
+    fseek(repertoire, 0, SEEK_SET);
+    while (fscanf(repertoire,"%s %s %s %s", p.NOM, p.PRENOM,p.AdresseMail, classement_temp) !=EOF)
+    {
+        if (strcmp(p.AdresseMail,nomrech)==0)
+        {
+            strcpy(p.Classement,classement_temp);
+            printf("\nAffichage de la structure: Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
+            trouve=(strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
+            fclose(repertoire);
+            return trouve;
+        }
+    }
+    return trouve;
+}
+
 
 
