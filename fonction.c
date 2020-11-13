@@ -112,14 +112,30 @@ void ajout_mot_clef(FILE * fichier) //Fonction ajoutant un seul mot clef
 	MOT_CLEF tab_mot_clef;
 	printf("Veuillez saisir le mot-clef à ajouter: ");
 	scanf("%s",tab_mot_clef.mot);
-	printf("Veuillez saisir l'annexe de votre mot-clef à ajouter: ");
+	printf("\nVeuillez saisir l'annexe de votre mot-clef à ajouter: ");
 	scanf("%d",&tab_mot_clef.annexe_mot);
 	fichier=fopen("mot_clef.txt","a+");
 	fprintf(fichier,"\n%-20s\t%d ",tab_mot_clef.mot, tab_mot_clef.annexe_mot);
     fclose(fichier);
 }
 void afficher_mot_clef(FILE * fichier) //Afficher tous les mots-clefs présents dans le fichier mot_clef.txt
-{
+{	
+	//***On réorganise le fichier et on le rend plus jolie***
+	MOT_CLEF p;
+	fichier=fopen("mot_clef.txt","a+");
+	fseek(fichier, 0, SEEK_SET);
+	FILE * fichier_temp=NULL;
+	fichier_temp=fopen("temp.txt","w+");
+	
+	while (fscanf(fichier,"%s %d", p.mot, &p.annexe_mot) !=EOF)
+		fprintf(fichier_temp, "\n%-20s %10d", p.mot, p.annexe_mot);
+		
+	fclose(fichier);
+	fclose(fichier_temp);
+	remove("mot_clef.txt");
+	rename("temp.txt","mot_clef.txt");
+	
+	//***Affichage du fichier caractère par caractère***
 	char car;
 	fichier=fopen("mot_clef.txt","a+");
 
@@ -133,6 +149,7 @@ void afficher_mot_clef(FILE * fichier) //Afficher tous les mots-clefs présents 
 	}
 	fclose(fichier);
 	printf("\n\n");
+	
 }
 
 void recherche_mot_clef(FILE * fichier)
@@ -151,6 +168,7 @@ void recherche_mot_clef(FILE * fichier)
 	fseek(fichier, 0, SEEK_SET);
 	while (fscanf(fichier,"%s %d", p.mot, &p.annexe_mot) !=EOF)
 		{
+				
             if (strcmp(p.mot,mot_recherche)==0)
 			{
 				printf("\nMot-clef: %s\tAnnexe: %d\n",p.mot,p.annexe_mot);
@@ -158,66 +176,41 @@ void recherche_mot_clef(FILE * fichier)
 			}
 		}
 	if(indicateur==0)
-		printf("Erreur: Ce mot-clef n'existe pas.");
+		printf("\nErreur: Ce mot-clef n'existe pas.\n");
 	fclose(fichier);
-	
-	/*char mot_a_supprimer[60];
-	fichier = fopen ("mot_clef.txt","r+");	
-	printf("Chargement des éléments du fichier dans une structure et affichage à partir de la structure");
-	for(int i=0;i<TMAX;i++){
-	while(fscanf(fichier," %s %d", tableau[i].mot, &tableau[i].annexe_mot) !=EOF)//Je charge mon fichier (mot clef et entier associé) dans ma structure
-		printf("\n%-20s et %10d", tableau[i].mot, tableau[i].annexe_mot); //Je print à partir de ma structure
-	}
-	fclose(fichier);
-	
-	
-	printf("\n\nEntrez le mot à supprimer : ");
-	scanf("%s", &mot_a_supprimer[0]);
-	printf("OK");
-	
-	int indicateur=0;
-	int indicateur2=0;
-	printf("OK");
-	
-	for(int a=0; a<TMAX; a++)
-	{
-		printf("OK");
-		if(strcmp(tableau[a].mot, mot_a_supprimer)==0)
-		{
-			printf("Trouvé!");
-			indicateur=1;
-			indicateur2=a;
-			break;
-		}
-	}
-	
-	if(indicateur==0)
-		printf("Ce mot n'existe pas!");
-	else
-	{
-		for(int t=indicateur2; t<TMAX; t++)		
-		{
-			strcpy(tableau[t].mot, tableau[t+1].mot);
-			tableau[t].annexe_mot = tableau[t+1].annexe_mot;
-		}	
-	}	
-	
-	printf("\n\n Affichage du contenu de la structure MOT: \n");*/
-	
-	/*for(int i=0; i<TAILLE-1; i++)
-	{
-	printf("%5d", tableau[i].indexe);
-	printf("%20s\n", tableau[i].mot);
-	}*/
 	
 	
 }
 
 void supprimer_mot_clef(FILE * fichier)
 {
+	MOT_CLEF p;
+	char mot_a_supprimer[60];
+	int indicateur=0;
+	printf("\n\nEntrez le mot à supprimer : ");
+	scanf("%s", mot_a_supprimer);
+	fichier=fopen("mot_clef.txt","a+");
+	fseek(fichier, 0, SEEK_SET);
+	FILE * fichier_temp=NULL;
+	fichier_temp=fopen("temp.txt","w+");
 	
-
-
+	while (fscanf(fichier,"%s %d", p.mot, &p.annexe_mot) !=EOF)
+		{
+            if (strcmp(p.mot,mot_a_supprimer)!=0)
+			{
+				fprintf(fichier_temp, "\n%-20s %10d", p.mot, p.annexe_mot);
+			}
+			else
+			{
+				indicateur=1;
+			}	
+		}
+	if(indicateur==0)
+		printf("\nErreur: Ce mot-clef n'existe pas.\n");
+	fclose(fichier);
+	fclose(fichier_temp);
+	remove("mot_clef.txt");
+	rename("temp.txt","mot_clef.txt");
 
 }
 
