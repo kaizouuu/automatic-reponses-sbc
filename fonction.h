@@ -20,13 +20,17 @@ typedef struct {
     char mot[60];
     int annexe_mot;
 }MOT_CLEF;
-void menu(FILE*,FILE*,FILE*,PERS*,MOT_CLEF*,DONNEE*,char*,int*);
+
+
+void menu(FILE*,FILE*,FILE*,PERS*,DONNEE*,char*,int*);
 
 void saisir_repertoire (FILE*, PERS*); //fonction pour saisir les personne dans le fichier repertoire     //definition des fonctions
 void affichage_repertoire(FILE*);  //fonction qui affiche le repertoire
 int rechercher_personne(FILE*, char*); //fonction qui cherche une personne à partir de son nom dans le repertoire
 
-void ajout_mot_clef(FILE *, MOT_CLEF *);//fonction pour saisir un nouveau mot cle
+void ajout_mot_clef(FILE *);//fonction pour saisir un nouveau mot cle
 void afficher_mot_clef(FILE *);//fonction pour afficher le repertoire des mot cle
+void recherche_mot_clef(FILE*);
+void supprimer_mot_clef(FILE*);
 
 void saisie_DT_Obj(FILE*, DONNEE*);  //fonction pour saisir les caractéristisques du mail (emetteur destinataire obj...)

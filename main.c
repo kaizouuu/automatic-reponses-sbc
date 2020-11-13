@@ -8,14 +8,13 @@
 int main()
 {
     char nomrech[100];
-    int recherhce;
+    int recherche;
     PERS p;
     DONNEE mail_utilisateur;
-    MOT_CLEF tab_mot_clef;
     FILE * repertoire=NULL;
     FILE * donnee=NULL;
     FILE * mot_clef=NULL;
-    menu(repertoire,donnee,mot_clef,&p,&tab_mot_clef,&mail_utilisateur,&nomrech,&recherhce);
+    menu(repertoire,donnee,mot_clef,&p,&mail_utilisateur,nomrech,&recherche);
 
     return 0;
 }
