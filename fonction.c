@@ -226,13 +226,13 @@ void supprimer_mot_clef(FILE * fichier)
 void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur)
 {
         printf ("Veuillez saisir votre adresse mail : \n");
-            scanf ("%s",mail_utilisateur->EM);
+            fgets(mail_utilisateur->EM,60,stdin);
             printf ("Veuillez saisir l'asresse mail de votre destinataire : \n");
-            scanf ("%s",mail_utilisateur->DT);
+            fgets (mail_utilisateur->DT,60,stdin);
             printf ("Entrez l'objet du mail : \n");
-            scanf ("%s",mail_utilisateur->OBJ);
+            fgets (mail_utilisateur->OBJ,60,stdin);
             printf ("Entrez le message : \n");
-            scanf ("%s",mail_utilisateur->CORPS);
+            fgets (mail_utilisateur->CORPS,1000,stdin);
             donne=fopen("donne.txt","a+");
             fprintf(donne,"\n%s \n%s \n%s \n%s",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
             fprintf(donne, "Le Monsieur qui utilise le programme");
