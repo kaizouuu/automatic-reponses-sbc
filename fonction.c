@@ -85,7 +85,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_
         break;
     default : break;
     }
-    }while (i != 0);
+    }while (v != 0);
 }
 
 void saisir_repertoire(FILE *repertoire, PERS *p)

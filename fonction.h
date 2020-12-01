@@ -4,7 +4,7 @@ typedef struct {
     char NOM[60];
     char PRENOM[60];
     char AdresseMail[60];
-    char Classement[TMAX];
+    char Classement[4];
 }PERS;
 
 typedef struct {
