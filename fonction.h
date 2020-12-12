@@ -22,7 +22,7 @@ typedef struct {
 }MOT_CLEF;
 
 
-void menu(FILE*,FILE*,FILE*,PERS*,DONNEE*,char*,int*);
+void menu(FILE*,FILE*,FILE*,PERS*,DONNEE*,char*,int);
 
 void saisir_repertoire (FILE*, PERS*); //fonction pour saisir les personne dans le fichier repertoire     //definition des fonctions
 void affichage_repertoire(FILE*);  //fonction qui affiche le repertoire
@@ -34,7 +34,7 @@ void afficher_mot_clef(FILE *);//fonction pour afficher le repertoire des mot cl
 void recherche_mot_clef(FILE*);
 void supprimer_mot_clef(FILE*);
 
-void saisie_DT_Obj(FILE*, DONNEE*,FILE*,int*,char*);  //fonction pour saisir les caractéristisques du mail (emetteur destinataire obj...)
+void saisie_DT_Obj(FILE*, DONNEE*,FILE*,int,char*);  //fonction pour saisir les caractéristisques du mail (emetteur destinataire obj...)
 int rechercher_EM(FILE*,char*);
 void viderBuffer();
 int lire(char *chaine, int longueur);

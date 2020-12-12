@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "fonction.h"
 
-void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_utilisateur, char *nomrech, int *recherche)
+void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_utilisateur, char *nomrech, int recherche)
 {
     char mdp_admin[60] = "mdp";
     int i;
@@ -50,7 +50,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_
                     case 3:
                         printf("Saisissez un nom a rechercher\n");
                         scanf("%s", nomrech);
-                        *recherche = rechercher_personne(repertoire, nomrech);
+                        recherche = rechercher_personne(repertoire, nomrech);
                         break;
                     case 4:
                         break;
@@ -80,7 +80,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_
 
             case 1:
                 printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-                saisie_DT_Obj(donnee,mail_utilisateur,repertoire,&recherche,nomrech);
+                saisie_DT_Obj(donnee,mail_utilisateur,repertoire,recherche,nomrech);
                 break;
             case 2:
                 printf ("\n********** Tapez CTRL+C **********\n\n");
@@ -225,7 +225,7 @@ void supprimer_mot_clef(FILE * fichier)
 
 
 
-void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,int *recherche,char *nomrech)
+void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,int recherche,char *nomrech)
 {
     printf ("Veuillez saisir votre adresse mail : \n");
     getchar (); //vider le buffer
@@ -239,7 +239,7 @@ void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,int *r
     donne=fopen("donne.txt","a+");
     fprintf(donne,"\n%s \n%s \n%s \n%s",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
     strcpy(nomrech, mail_utilisateur->EM);
-    *recherche=rechercher_EM(repertoire,nomrech);
+    recherche=rechercher_EM(repertoire,nomrech);
     fclose(donne);
 }
 int rechercher_personne(FILE *repertoire, char *nomrech)

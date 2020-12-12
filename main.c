@@ -8,13 +8,13 @@
 int main()
 {
     char nomrech[100];
-    int recherche;
+    int recherche=-1; //Initialisation à une valeur de base
     PERS p;
     DONNEE mail_utilisateur;
     FILE * repertoire=NULL;
     FILE * donnee=NULL;
     FILE * mot_clef=NULL;
-    menu(repertoire,donnee,mot_clef,&p,&mail_utilisateur,nomrech,&recherche);
+    menu(repertoire,donnee,mot_clef,&p,&mail_utilisateur,nomrech,recherche);
 
     return 0;
 }
