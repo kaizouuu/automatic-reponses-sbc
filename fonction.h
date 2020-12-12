@@ -27,7 +27,7 @@ void menu(FILE*,FILE*,FILE*,PERS*,DONNEE*,char*,int*);
 void saisir_repertoire (FILE*, PERS*); //fonction pour saisir les personne dans le fichier repertoire     //definition des fonctions
 void affichage_repertoire(FILE*);  //fonction qui affiche le repertoire
 int rechercher_personne(FILE*, char*); //fonction qui cherche une personne à partir de son nom dans le repertoire
-int rechercher_EM(FILE*, char*);
+void suprime_personne (FILE*, char*); // fonction qui suprime une personne dans un fichier
 
 void ajout_mot_clef(FILE *);//fonction pour saisir un nouveau mot cle
 void afficher_mot_clef(FILE *);//fonction pour afficher le repertoire des mot cle
