@@ -36,3 +36,5 @@ void supprimer_mot_clef(FILE*);
 
 void saisie_DT_Obj(FILE*, DONNEE*,FILE*,int*,char*);  //fonction pour saisir les caractéristisques du mail (emetteur destinataire obj...)
 int rechercher_EM(FILE*,char*);
+void viderBuffer();
+int lire(char *chaine, int longueur);
