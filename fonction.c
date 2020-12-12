@@ -53,6 +53,9 @@ void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_
                         *recherche = rechercher_personne(repertoire, nomrech);
                         break;
                     case 4:
+                        printf("Saisissez un nom a suprimer\n");
+                        scanf("%s", nomrech);
+                        suprime_personne(repertoire, nomrech);
                         break;
                     case 5:
                         ajout_mot_clef(mot_clef); //Pas besoin de mettre &tab_mot_clef
@@ -114,6 +117,54 @@ void affichage_repertoire(FILE *repertoire)
         printf("\nAffichage du repertoire: Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s\n", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
     }
     fclose(repertoire);
+}
+int rechercher_personne(FILE *repertoire, char *nomrech)
+{
+    int trouve = 0;
+    char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
+    PERS p;
+    repertoire = fopen("repertoire.txt", "a+");
+    fseek(repertoire, 0, SEEK_SET);
+
+    while (fscanf(repertoire, "%s %s %s %s", p.NOM, p.PRENOM, p.AdresseMail, classement_temp) != EOF)
+    {
+        if (strcmp(p.NOM, nomrech) == 0)
+        {
+            strcpy(p.Classement, classement_temp);
+            printf("\nAffichage de la structure: Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
+            trouve = (strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
+            fclose(repertoire);
+            return trouve;
+        }
+    }
+    return trouve;
+}
+void suprime_personne(FILE *fichier, char *nomrech)
+{
+    PERS p;
+    int indicateur=0;
+    fichier=fopen("repertoire.txt","a+");
+    fseek(fichier, 0, SEEK_SET);
+    FILE * fichier_temp=NULL;
+    fichier_temp=fopen("temp.txt","w+");
+
+    while (fscanf(fichier,"%s %s %s %s", p.NOM, p.PRENOM,p.AdresseMail,p.Classement) !=EOF)
+    {
+        if (strcmp(p.NOM,nomrech)!=0)
+        {
+            fprintf(fichier_temp, "\n%-20s %10s %10s %10s", p.NOM, p.PRENOM,p.AdresseMail,p.Classement);
+        }
+        else
+        {
+            indicateur=1;
+        }
+    }
+    if(indicateur==0)
+        printf("\nErreur: Cette personne n'existe pas.\n");
+    fclose(fichier);
+    fclose(fichier_temp);
+    remove("repertoire.txt");
+    rename("temp.txt","repertoire.txt");
 }
 
 void ajout_mot_clef(FILE *fichier) //Fonction ajoutant un seul mot clef
@@ -241,27 +292,6 @@ void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,int *r
     strcpy(nomrech, mail_utilisateur->EM);
     *recherche=rechercher_EM(repertoire,nomrech);
     fclose(donne);
-}
-int rechercher_personne(FILE *repertoire, char *nomrech)
-{
-    int trouve = 0;
-    char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
-    PERS p;
-    repertoire = fopen("repertoire.txt", "a+");
-    fseek(repertoire, 0, SEEK_SET);
-
-    while (fscanf(repertoire, "%s %s %s %s", p.NOM, p.PRENOM, p.AdresseMail, classement_temp) != EOF)
-    {
-        if (strcmp(p.NOM, nomrech) == 0)
-        {
-            strcpy(p.Classement, classement_temp);
-            printf("\nAffichage de la structure: Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
-            trouve = (strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
-            fclose(repertoire);
-            return trouve;
-        }
-    }
-    return trouve;
 }
 int rechercher_EM(FILE *repertoire, char *nomrech)
 {
