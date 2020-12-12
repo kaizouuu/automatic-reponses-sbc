@@ -14,6 +14,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_
         printf("********** Bienvenu dans le promgramme de reponse automatique du SBC ***********\n");
         printf("0 pour le mode administrateur\n");
         printf("1 pour le mode utilisateur\n");
+        printf("2 sortir du programme\n");
         scanf("%d", &v);
         switch (v)
         {
@@ -78,13 +79,15 @@ void menu(FILE *repertoire, FILE *donnee, FILE *mot_clef, PERS *p, DONNEE *mail_
             }
 
             case 1:
-            printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-            saisie_DT_Obj(donnee,mail_utilisateur,repertoire,&recherche,nomrech);
-            //cherche_dans_un_fichier(donnee);
-        break;
+                printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
+                saisie_DT_Obj(donnee,mail_utilisateur,repertoire,&recherche,nomrech);
+                break;
+            case 2:
+                printf ("\n********** Tapez CTRL+C **********\n\n");
+                break;
     default : break;
     }
-    }while (i != 0);
+    }while (v!= 0);
 }
 
 void saisir_repertoire(FILE *repertoire, PERS *p)
@@ -273,14 +276,14 @@ int rechercher_EM(FILE *repertoire, char *nomrech)
         if (strcmp(p.AdresseMail,nomrech)==0)
         {
             strcpy(p.Classement,classement_temp);
-            printf("\nProfil reconnu !");
+            printf("\nProfil reconnu !\n");
             trouve=(strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
             fclose(repertoire);
             return trouve;
         }
         else
         {
-            printf("\nProfil non reconnu veuillez enregistrer votre  profil");
+            printf("\nVotre adresse mail n'est pas enregiste veuillez contacter le SBC\n");
         }
         
     }
