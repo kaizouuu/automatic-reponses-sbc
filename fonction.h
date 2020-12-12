@@ -18,7 +18,7 @@ typedef struct {
 
 typedef struct {
     char mot[60];
-    int annexe_mot;
+    char annexe_mot[500];
 }MOT_CLEF;
 
 
@@ -34,7 +34,8 @@ void afficher_mot_clef(FILE *);//fonction pour afficher le repertoire des mot cl
 void recherche_mot_clef(FILE*);
 void supprimer_mot_clef(FILE*);
 
-void saisie_DT_Obj(FILE*, DONNEE*,FILE*,int*,char*);  //fonction pour saisir les caractéristisques du mail (emetteur destinataire obj...)
+void saisie_DT_Obj(FILE*, DONNEE*,FILE*,FILE*,int*,char*);  //fonction pour saisir les caractéristisques du mail (emetteur destinataire obj...)
 int rechercher_EM(FILE*,char*);
 void viderBuffer();
 int lire(char *chaine, int longueur);
+void recherche_mot(FILE *donne,FILE *mot_clef);
