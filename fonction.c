@@ -123,7 +123,7 @@ void ajout_mot_clef(FILE *fichier) //Fonction ajoutant un seul mot clef
 	printf("\nVeuillez saisir l'annexe de votre mot-clef à ajouter: ");
 	lire(tab_mot_clef.annexe_mot,500);
 	fichier=fopen("mot_clef.txt","a+");
-	fprintf(fichier,"\n%-20s\t%d ",tab_mot_clef.mot, tab_mot_clef.annexe_mot);
+	fprintf(fichier,"\n%s\n%s ",tab_mot_clef.mot, tab_mot_clef.annexe_mot);
     fclose(fichier);
 }
 void afficher_mot_clef(FILE * fichier) //Afficher tous les mots-clefs présents dans le fichier mot_clef.txt
@@ -132,19 +132,13 @@ void afficher_mot_clef(FILE * fichier) //Afficher tous les mots-clefs présents 
 	MOT_CLEF p;
 	fichier=fopen("mot_clef.txt","a+");
 	fseek(fichier, 0, SEEK_SET);
-	FILE * fichier_temp=NULL;
-	fichier_temp=fopen("temp.txt","w+");
 	
-	while (fscanf(fichier,"%s %d", p.mot, &p.annexe_mot) !=EOF)
-		fprintf(fichier_temp, "\n%-20s %10d", p.mot, p.annexe_mot);
-		
-	fclose(fichier);
-	fclose(fichier_temp);
-	remove("mot_clef.txt");
-	rename("temp.txt","mot_clef.txt");
-	
+	while (fscanf(fichier,"%s %s", p.mot, p.annexe_mot) !=EOF)
+    {
+			printf("%s %s", p.mot, p.annexe_mot);
+    }
 	//***Affichage du fichier caractère par caractère***
-	char car;
+	/*char car;
 	fichier=fopen("mot_clef.txt","a+");
 
     printf("\n\nAffichage des mots clefs: \n");
@@ -154,7 +148,7 @@ void afficher_mot_clef(FILE * fichier) //Afficher tous les mots-clefs présents 
 	{
 		printf ("%c", car);
 		car = fgetc(fichier);
-	}
+	}*/
 	fclose(fichier);
 	printf("\n\n");
 	
@@ -174,12 +168,12 @@ void recherche_mot_clef(FILE *fichier)
 	scanf("%s", mot_recherche);
 	fichier=fopen("mot_clef.txt","a+");
 	fseek(fichier, 0, SEEK_SET);
-	while (fscanf(fichier,"%s %d", p.mot, &p.annexe_mot) !=EOF)
+	while (fscanf(fichier,"%s %s", p.mot, &p.annexe_mot) !=EOF)
 		{
 				
             if (strcmp(p.mot,mot_recherche)==0)
 			{
-				printf("\nMot-clef: %s\tAnnexe: %d\n",p.mot,p.annexe_mot);
+				printf("\nMot-clef: %s\tAnnexe: %s\n",p.mot,p.annexe_mot);
 				indicateur=1;
 			}
 		}
@@ -206,7 +200,7 @@ void supprimer_mot_clef(FILE * fichier)
 		{
             if (strcmp(p.mot,mot_a_supprimer)!=0)
 			{
-				fprintf(fichier_temp, "\n%-20s %s", p.mot, p.annexe_mot);
+				fprintf(fichier_temp, "\n%s \n%s", p.mot, p.annexe_mot);
 			}
 			else
 			{
