@@ -91,6 +91,7 @@ void saisir_repertoire(FILE *repertoire, PERS *p)
 {
 
     printf("Entrez le nom de la personne de votre choix: \n");
+    getchar();
     lire(p->NOM,60);
     printf("Entrez le prenom de cette personne : \n");
     lire(p->PRENOM,60);
@@ -117,6 +118,7 @@ void ajout_mot_clef(FILE *fichier) //Fonction ajoutant un seul mot clef
 {
 	MOT_CLEF tab_mot_clef;
 	printf("Veuillez saisir le mot-clef à ajouter: ");
+    getchar();
 	lire(tab_mot_clef.mot,60);
 	printf("\nVeuillez saisir l'annexe de votre mot-clef à ajouter: ");
 	lire(tab_mot_clef.annexe_mot,500);
