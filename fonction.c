@@ -40,6 +40,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
                     switch (i)
                     {
                     case 0:
+						printf ("\n********** AU REVOIR **********\n\n");
                         break;
                     case 1:
                         saisir_repertoire(repertoire, p); //Pas besoin de mettre &p ici. Pouquoi ? Aucune idée. A investiguer
@@ -80,10 +81,11 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
 
             case 1:
                 printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-                saisie_DT_Obj(donnee,mail_utilisateur,repertoire,recherche,nomrech);
+                saisie_DT_Obj(donnee,mail_utilisateur,repertoire,motclef,recherche,nomrech);
                 break;
             case 2:
-                printf ("\n********** Tapez CTRL+C **********\n\n");
+                printf ("\n********** AU REVOIR **********\n\n");
+                exit(0);
                 break;
     default : break;
     }
