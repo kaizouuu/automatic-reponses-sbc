@@ -31,9 +31,10 @@ void affichage_repertoire(FILE*);  //fonction qui affiche le repertoire
 int rechercher_personne(FILE*, char*); //fonction qui cherche une personne à partir de son nom dans le repertoire
 int rechercher_EM(FILE*, char*);
 
-void ajout_mot_clef(FILE *);//fonction pour saisir un nouveau mot cle
-void afficher_mot_clef(FILE *);//fonction pour afficher le repertoire des mot cle
-void recherche_mot_clef(FILE*);
+//Les fonctions permettant la gestion des mots-clefs et des réponses associées
+void ajout_mot_clef(FILE *);     
+void afficher_mot_clef(FILE *);   
+void recherche_mot_clef(FILE*);   
 void supprimer_mot_clef(FILE*);
 
 void saisie_DT_Obj(FILE*, DONNEE*,FILE*,FILE*,int,char*);  //fonction pour saisir les caractéristisques du mail (emetteur destinataire obj...)
@@ -41,3 +42,6 @@ int rechercher_EM(FILE*,char*);
 void viderBuffer();
 int lire(char *chaine, int longueur);
 void recherche_mot(FILE *donne,FILE *mot_clef);
+
+
+void fonction_utilisateur(FILE *donne, DONNEE* mail_utilisateur, FILE *motclef);

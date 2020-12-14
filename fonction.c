@@ -81,7 +81,8 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
 
             case 1:
                 printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-                saisie_DT_Obj(donnee,mail_utilisateur,repertoire,motclef,recherche,nomrech);
+                //saisie_DT_Obj(donnee,mail_utilisateur,repertoire,motclef,recherche,nomrech);
+                fonction_utilisateur(donnee, mail_utilisateur, motclef);
                 break;
             case 2:
                 printf ("\n********** AU REVOIR **********\n\n");
@@ -94,12 +95,11 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
 
 void saisir_repertoire(FILE *repertoire, PERS *p)
 {
-
-    printf("Entrez le nom de la personne de votre choix: \n");
-    getchar();
-    lire(p->NOM,TCHAINE);
-    printf("Entrez le prenom de cette personne : \n");
+	printf("Entrez le prenom de cette personne : \n");
+	getchar();
     lire(p->PRENOM,TCHAINE);
+    printf("Entrez le nom de la personne de votre choix: \n");
+    lire(p->NOM,TCHAINE);
     printf("Entrez le adresse mail de cette personne : \n");
     lire(p->AdresseMail,TCHAINE);
     printf("Entrez le classement de cette personne : \n");
@@ -112,16 +112,16 @@ void affichage_repertoire(FILE *repertoire)
 {
     PERS p;
     repertoire = fopen("repertoire.txt", "a+");
+    printf("\nAffichage du répertoire: \n");
     while (fscanf(repertoire, "%s %s %s %s", p.NOM, p.PRENOM, p.AdresseMail, p.Classement) != EOF)
     {
-        printf("\nAffichage du repertoire: Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s\n", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
+        printf("Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s\n", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
     }
     fclose(repertoire);
 }
 
 /*Cette fonction a pour but d'ajouter un mot clef 
  * et sa réponse associé à notre fichier mot_clef.txt
- * 
  */
 void ajout_mot_clef(FILE *fichier) 
 {
@@ -140,7 +140,6 @@ void ajout_mot_clef(FILE *fichier)
 /*Cette fonction a pour but d'afficher tous les mot-clefs ainsi que les réponses associées
  * contenues dans mot_clef.txt. Ici on se contentera de recopier le fichier sur la sortie terminal
  * caractère par caractères en utilisant fgetc
- * 
  */
 void afficher_mot_clef(FILE * fichier) 
 {	
@@ -238,7 +237,6 @@ void supprimer_mot_clef(FILE * fichier)
 			{
 				fprintf(fichier_temp, "%s\n%s",p.mot,p.reponse);
 			}
-			
 		}
 	}
 	
@@ -255,24 +253,24 @@ void supprimer_mot_clef(FILE * fichier)
 
 
 
-void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,FILE *motclef, int recherche,char *nomrech)
+/*void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,FILE *motclef, int recherche,char *nomrech)
 {
     printf ("Veuillez saisir votre adresse mail : \n");
     getchar (); //vider le buffer
     lire(mail_utilisateur->EM,TCHAINE);
-    printf ("Veuillez saisir l'asresse mail de votre destinataire : \n");
+    printf ("Veuillez saisir l'adresse mail de votre destinataire : \n");
     lire(mail_utilisateur->DT,TCHAINE);
     printf ("Entrez l'objet du mail : \n");
     lire(mail_utilisateur->OBJ,TCHAINE);
     printf ("Entrez le message : \n");
     lire(mail_utilisateur->CORPS,TMAX);
     donne=fopen("donne.txt","a+");
-    fprintf(donne,"\n%s \n%s \n%s \n%s",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
+    fprintf(donne,"\n%s \n%s \n%s \n%s\n",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
     strcpy(nomrech, mail_utilisateur->EM);
     recherche=rechercher_EM(repertoire,nomrech);
     //recherche_mot(donne,motclef);
     fclose(donne);
-}
+}*/
 int rechercher_personne(FILE *repertoire, char *nomrech)
 {
     int trouve = 0;
@@ -316,7 +314,6 @@ int rechercher_EM(FILE *repertoire, char *nomrech)
         {
             printf("\nVotre adresse mail n'est pas enregiste veuillez contacter le SBC\n");
         }
-        
     }
     return trouve;
 }
@@ -357,7 +354,7 @@ int lire(char *chaine, int longueur) // Fonction pour palier au Pb de Retour Cha
 {
     int trouve=0;
     char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
-    char mot_trouve[500];
+    char mot_trouve[TMAX];
     MOT_CLEF p;
     DONNEE mail_utilisateur;
     int i=0;
@@ -367,14 +364,15 @@ int lire(char *chaine, int longueur) // Fonction pour palier au Pb de Retour Cha
                                                                                     //
         if (mail_utilisateur.CORPS ==' '){                                          //
             while((mail_utilisateur.CORPS ==' ') && (mail_utilisateur.CORPS !='\0')){   //
-                                                                                //
+                                                                                       //
                 if(mail_utilisateur.CORPS !=' ')
                 {cpt++;}                            //
             }                                                                       //
         }                                                                           //
         i++;                                                                        //
     } 
-    printf("%d",cpt);                                                                              //
+    printf("%d",cpt);    
+                                                                              
     motclef=fopen("mot_clef.txt","a+");
     donne=fopen("donne.txt","a+");
     fseek(motclef, 0, SEEK_SET);
@@ -402,5 +400,51 @@ printf(" reponse: %s", p.annexe_mot);
 
 fclose(motclef);
 
+}*/
+void fonction_utilisateur(FILE *donne, DONNEE* mail_utilisateur, FILE *motclef)
+{
+	MOT_CLEF p;
+    donne=fopen("donne.txt","a+");
+    motclef=fopen("mot_clef.txt","a+");
+	fseek(motclef, 0, SEEK_SET);
+	char ligne[TMAX];
+	int indicateur=0;
+   
+   
+    printf ("Veuillez saisir votre adresse mail : \n");
+    getchar ();                                                                                 //vider le buffer
+    lire(mail_utilisateur->EM,TCHAINE);
+    printf ("Veuillez saisir l'adresse mail de votre destinataire : \n");
+    lire(mail_utilisateur->DT,TCHAINE);
+    printf ("Entrez l'objet du mail : \n");
+    lire(mail_utilisateur->OBJ,TCHAINE);
+    printf ("Entrez le corps du mail : \n");
+    lire(mail_utilisateur->CORPS,TMAX);
+    fprintf(donne,"\n%s \n%s \n%s \n%s\n",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);	
+	
+	
+	arriere:
+	while(fgets(ligne,TMAX,motclef)!=NULL)
+	{	
+		if (ligne[0]=='\n')
+		{
+			goto arriere;
+		}
+		else
+		{
+			sscanf(ligne,"%s",p.mot);
+			fgets(p.reponse,TMAX,motclef);
+			if (strstr(mail_utilisateur->CORPS,p.mot)!=NULL)
+			{
+				indicateur=1;
+				printf("La réponse est: %s", p.reponse);
+			}
+		}
+	}
+	
+	if (indicateur==0)
+		printf("\nCe mot-clef n'existe pas !\n");
+	fclose(motclef);
+    fclose(donne);
 }
-*/
+
