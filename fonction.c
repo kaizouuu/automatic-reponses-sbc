@@ -322,7 +322,30 @@ void supprimer_mot_clef(FILE * fichier)
     recherche=rechercher_EM(repertoire,nomrech);
     //recherche_mot(donne,motclef);
     fclose(donne);
+}*/
+
+int rechercher_personne(FILE *repertoire, char *nomrech)
+{
+    int trouve = 0;
+    char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
+    PERS p;
+    repertoire = fopen("repertoire.txt", "a+");
+    fseek(repertoire, 0, SEEK_SET);
+
+    while (fscanf(repertoire, "%s %s %s %s", p.NOM, p.PRENOM, p.AdresseMail, classement_temp) != EOF)
+    {
+        if (strcmp(p.NOM, nomrech) == 0)
+        {
+            strcpy(p.Classement, classement_temp);
+            printf("\nAffichage de la structure: Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
+            trouve = (strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
+            fclose(repertoire);
+            return trouve;
+        }
+    }
+    return trouve;
 }
+
 int rechercher_EM(FILE *repertoire, char *nomrech)
 {
     int trouve=0;
