@@ -12,7 +12,6 @@ typedef struct {
 typedef struct {
 
     char EM[TCHAINE];
-    char DT[TCHAINE];
     char OBJ[TCHAINE];
     char CORPS[TMAX];
 

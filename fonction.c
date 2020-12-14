@@ -85,7 +85,6 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
 
             case 1:
                 printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-                //saisie_DT_Obj(donnee, mail_utilisateur,repertoire,motclef,recherche,nomrech);
                 fonction_utilisateur(donnee, repertoire, motclef, mail_utilisateur, nomrech);
                 break;
             case 2:
@@ -119,13 +118,14 @@ void affichage_repertoire(FILE *repertoire)
     printf("\nAffichage du répertoire: \n");
     while (fscanf(repertoire, "%s %s %s %s", p.NOM, p.PRENOM, p.AdresseMail, p.Classement) != EOF)
     {
-        printf("Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s\n", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
+        printf("Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s\n\n", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
     }
     fclose(repertoire);
 }
 int rechercher_personne(FILE *repertoire, char *nomrech)
 {
     int trouve = 0;
+    int indicateur=0;
     char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
     PERS p;
     repertoire = fopen("repertoire.txt", "a+");
@@ -139,9 +139,15 @@ int rechercher_personne(FILE *repertoire, char *nomrech)
             printf("\nAffichage de la structure: Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
             trouve = (strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
             fclose(repertoire);
+            indicateur=1;
             return trouve;
         }
     }
+    if (indicateur==0)
+    {
+		printf("\nCette personne n'est pas présente dans le répertoire !\n\n");
+	}
+    
     return trouve;
 }
 void supprime_personne(FILE *fichier, char *nomrech)
@@ -316,7 +322,6 @@ int rechercher_EM(FILE *repertoire, char *nomrech)
         if (strcmp(p.AdresseMail,nomrech)==0)
         {
             strcpy(p.Classement,classement_temp);
-            printf("\nProfil reconnu !\n");
             trouve=(strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
             trouve=1;
         }
@@ -377,18 +382,17 @@ void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* 
     
       if (trouve==0)
       {
-          printf("\nVotre adresse mail n'est pas enregiste veuillez contacter le SBC\n\n");
+          printf("\nVotre adresse mail n'est pas enregistre, veuillez contacter le SBC\n\n");
           indicateur=1;
       }
       else
       {
-		    printf ("Veuillez saisir l'adresse mail de votre destinataire : \n");
-		    lire(mail_utilisateur->DT,TCHAINE);
             printf ("Entrez l'objet du mail : \n");
             lire(mail_utilisateur->OBJ,TCHAINE);
             printf ("Entrez le corps du mail : \n");
             lire(mail_utilisateur->CORPS,TMAX);
-            fprintf(donne,"\n%s \n%s \n%s \n%s\n",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
+            fprintf(donne, "\n\n************************Mail recu sur la boite du club************************");
+            fprintf(donne,"\nExpediteur: %s \nObjet: %s \nCorps: %s\n",mail_utilisateur->EM,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
 		  
 			arriere:
 			while(fgets(ligne,TMAX,motclef)!=NULL)
@@ -404,10 +408,20 @@ void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* 
 					if (strstr(mail_utilisateur->CORPS,p.mot)!=NULL)
 					{
 						indicateur=1;
+						
+						printf("\nMail automatique de reponse: ");
+						fprintf(donne, "\nMail automatique de reponse: ");
+						
+						printf("\nExpediteur: club.sbc@gmail.com");
+						fprintf(donne, "\nExpediteur: club.sbc@gmail.com");
+						
 						printf("\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
 						fprintf(donne, "\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
+						
 						printf("\nCorps: %s\n\n", p.reponse);
-						fprintf(donne,"\n%s", p.reponse);
+						fprintf(donne,"\nCorps: %s", p.reponse);
+						
+						printf("\nHistorique des mails disponibles dans le fichier \"donne.txt\"\n");
 					}
 				}
 			} 
@@ -415,9 +429,15 @@ void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* 
 		
 	if (indicateur==0)
 	{
-		printf("\n\nDesole, votre demande n'entre pas dans le champ de competence de cet automate!\nVeuillez contacter notre equipe directement sur site (avec un masque!).\nMerci.\n\n");
+		printf("\nMail automatique de reponse: ");
+		fprintf(donne, "\nMail automatique de reponse: ");
+		
+		printf("\nExpediteur: club.sbc@gmail.com");
+		fprintf(donne, "\nExpediteur: club.sbc@gmail.com");
+		
 		printf("\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
 		fprintf(donne, "\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
+		
 		printf("\nCorps: Desole, votre demande n'entre pas dans le champ de competence de cet automate!\nVeuillez contacter notre equipe directement sur site (avec un masque!).\nMerci.\n\n");
 		fprintf(donne,"\nCorps: Desole, votre demande n'entre pas dans le champ de competence de cet automate!\nVeuillez contacter notre equipe directement sur site (avec un masque!).\nMerci.\n\n");
 	}
