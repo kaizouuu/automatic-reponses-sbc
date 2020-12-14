@@ -271,6 +271,7 @@ void supprimer_mot_clef(FILE * fichier)
     //recherche_mot(donne,motclef);
     fclose(donne);
 }*/
+
 int rechercher_personne(FILE *repertoire, char *nomrech)
 {
     int trouve = 0;
@@ -292,6 +293,7 @@ int rechercher_personne(FILE *repertoire, char *nomrech)
     }
     return trouve;
 }
+
 int rechercher_EM(FILE *repertoire, char *nomrech)
 {
     int trouve=0;
