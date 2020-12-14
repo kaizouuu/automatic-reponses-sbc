@@ -9,6 +9,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
     int i;
     int v;
     char mot_de_passe[TCHAINE];
+    menu:
     do
     {
         printf("********** Bienvenu dans le promgramme de reponse automatique du SBC ***********\n");
@@ -26,7 +27,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
                 do
                 {
                     printf("\n********** VOUS ETES DANS LE MODE ADMINISTATEUR **********\n");
-                    printf(" 0 pour quitter le programme\n");
+                    printf(" 0 pour retourner au premier menu\n");
                     printf(" 1 pour inserer une personne dans le repertoire\n");
                     printf(" 2 pour afficher le repertoire\n");
                     printf(" 3 pour rechercher une coordonnée\n");
@@ -40,7 +41,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
                     switch (i)
                     {
                     case 0:
-						printf ("\n********** AU REVOIR **********\n\n");
+						goto menu;
                         break;
                     case 1:
                         saisir_repertoire(repertoire, p); //Pas besoin de mettre &p ici. Pouquoi ? Aucune idée. A investiguer
