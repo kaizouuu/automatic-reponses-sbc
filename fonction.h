@@ -43,5 +43,4 @@ void viderBuffer();
 int lire(char *chaine, int longueur);
 void recherche_mot(FILE *donne,FILE *mot_clef);
 
-
-void fonction_utilisateur(FILE *donne, DONNEE* mail_utilisateur, FILE *motclef);
+void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* mail_utilisateur, char *nomrech);

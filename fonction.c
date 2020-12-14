@@ -81,8 +81,8 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
 
             case 1:
                 printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
-                //saisie_DT_Obj(donnee,mail_utilisateur,repertoire,motclef,recherche,nomrech);
-                fonction_utilisateur(donnee, mail_utilisateur, motclef);
+                //saisie_DT_Obj(donnee, mail_utilisateur,repertoire,motclef,recherche,nomrech);
+                fonction_utilisateur(donnee, repertoire, motclef, mail_utilisateur, nomrech);
                 break;
             case 2:
                 printf ("\n********** AU REVOIR **********\n\n");
@@ -307,14 +307,11 @@ int rechercher_EM(FILE *repertoire, char *nomrech)
             strcpy(p.Classement,classement_temp);
             printf("\nProfil reconnu !\n");
             trouve=(strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
-            fclose(repertoire);
-            return trouve;
+            trouve=1;
         }
-        else
-        {
-            printf("\nVotre adresse mail n'est pas enregiste veuillez contacter le SBC\n");
-        }
+     
     }
+    fclose(repertoire);
     return trouve;
 }
 
@@ -401,7 +398,7 @@ printf(" reponse: %s", p.annexe_mot);
 fclose(motclef);
 
 }*/
-void fonction_utilisateur(FILE *donne, DONNEE* mail_utilisateur, FILE *motclef)
+void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* mail_utilisateur, char *nomrech)
 {
 	MOT_CLEF p;
     donne=fopen("donne.txt","a+");
@@ -409,44 +406,60 @@ void fonction_utilisateur(FILE *donne, DONNEE* mail_utilisateur, FILE *motclef)
 	fseek(motclef, 0, SEEK_SET);
 	char ligne[TMAX];
 	int indicateur=0;
+	int trouve=0;
    
    
     printf ("Veuillez saisir votre adresse mail : \n");
     getchar ();                                                                                 //vider le buffer
     lire(mail_utilisateur->EM,TCHAINE);
-    printf ("Veuillez saisir l'adresse mail de votre destinataire : \n");
-    lire(mail_utilisateur->DT,TCHAINE);
-    printf ("Entrez l'objet du mail : \n");
-    lire(mail_utilisateur->OBJ,TCHAINE);
-    printf ("Entrez le corps du mail : \n");
-    lire(mail_utilisateur->CORPS,TMAX);
-    fprintf(donne,"\n%s \n%s \n%s \n%s\n",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);	
-	
-	
-	arriere:
-	while(fgets(ligne,TMAX,motclef)!=NULL)
-	{	
-		if (ligne[0]=='\n')
-		{
-			goto arriere;
-		}
-		else
-		{
-			sscanf(ligne,"%s",p.mot);
-			fgets(p.reponse,TMAX,motclef);
-			if (strstr(mail_utilisateur->CORPS,p.mot)!=NULL)
-			{
-				indicateur=1;
-				printf("\nObjet: Réponse à: %s", mail_utilisateur->OBJ);
-				fprintf(donne, "\nObjet: Réponse à: %s", mail_utilisateur->OBJ);
-				printf("\nCorps: %s\n\n", p.reponse);
-				fprintf(donne,"\n%s", p.reponse);
-			}
-		}
-	}
-	
+    trouve=rechercher_EM(repertoire, mail_utilisateur->EM);
+    
+      if (trouve==0)
+      {
+          printf("\nVotre adresse mail n'est pas enregiste veuillez contacter le SBC\n\n");
+          indicateur=1;
+      }
+      else
+      {
+		    printf ("Veuillez saisir l'adresse mail de votre destinataire : \n");
+		    lire(mail_utilisateur->DT,TCHAINE);
+            printf ("Entrez l'objet du mail : \n");
+            lire(mail_utilisateur->OBJ,TCHAINE);
+            printf ("Entrez le corps du mail : \n");
+            lire(mail_utilisateur->CORPS,TMAX);
+            fprintf(donne,"\n%s \n%s \n%s \n%s\n",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
+		  
+			arriere:
+			while(fgets(ligne,TMAX,motclef)!=NULL)
+			{	
+				if (ligne[0]=='\n')
+				{
+					goto arriere;
+				}
+				else
+				{
+					sscanf(ligne,"%s",p.mot);
+					fgets(p.reponse,TMAX,motclef);
+					if (strstr(mail_utilisateur->CORPS,p.mot)!=NULL)
+					{
+						indicateur=1;
+						printf("\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
+						fprintf(donne, "\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
+						printf("\nCorps: %s\n\n", p.reponse);
+						fprintf(donne,"\n%s", p.reponse);
+					}
+				}
+			} 
+      }
+		
 	if (indicateur==0)
-		printf("\nCe mot-clef n'existe pas !\n");
+	{
+		printf("\n\nDesole, votre demande n'entre pas dans le champ de competence de cet automate!\nVeuillez contacter notre equipe directement sur site (avec un masque!).\nMerci.\n\n");
+		printf("\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
+		fprintf(donne, "\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
+		printf("\nCorps: Desole, votre demande n'entre pas dans le champ de competence de cet automate!\nVeuillez contacter notre equipe directement sur site (avec un masque!).\nMerci.\n\n");
+		fprintf(donne,"\nCorps: Desole, votre demande n'entre pas dans le champ de competence de cet automate!\nVeuillez contacter notre equipe directement sur site (avec un masque!).\nMerci.\n\n");
+	}
 	fclose(motclef);
     fclose(donne);
 }
