@@ -120,8 +120,8 @@ void affichage_repertoire(FILE *repertoire)
     fclose(repertoire);
 }
 
-/*Cette fonction a pour but d'ajouter un mot clef 
- * et sa réponse associé à notre fichier mot_clef.txt
+/*Cette fonction a pour but d'ajouter un mot clef et sa réponse associé à notre fichier mot_clef.txt
+ * 
  */
 void ajout_mot_clef(FILE *fichier) 
 {
@@ -437,7 +437,10 @@ void fonction_utilisateur(FILE *donne, DONNEE* mail_utilisateur, FILE *motclef)
 			if (strstr(mail_utilisateur->CORPS,p.mot)!=NULL)
 			{
 				indicateur=1;
-				printf("La réponse est: %s", p.reponse);
+				printf("\nObjet: Réponse à: %s", mail_utilisateur->OBJ);
+				fprintf(donne, "\nObjet: Réponse à: %s", mail_utilisateur->OBJ);
+				printf("\nCorps: %s\n\n", p.reponse);
+				fprintf(donne,"\n%s", p.reponse);
 			}
 		}
 	}
