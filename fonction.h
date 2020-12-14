@@ -29,7 +29,7 @@ void menu(FILE*,FILE*,FILE*,PERS*,DONNEE*,char*,int);
 void saisir_repertoire (FILE*, PERS*); //fonction pour saisir les personne dans le fichier repertoire     //definition des fonctions
 void affichage_repertoire(FILE*);  //fonction qui affiche le repertoire
 int rechercher_personne(FILE*, char*); //fonction qui cherche une personne à partir de son nom dans le repertoire
-void suprime_personne (FILE*, char*); // fonction qui suprime une personne dans un fichier
+void supprime_personne (FILE*, char*); // fonction qui suprime une personne dans un fichier
 
 //Les fonctions permettant la gestion des mots-clefs et des réponses associées
 void ajout_mot_clef(FILE *);     
@@ -37,10 +37,8 @@ void afficher_mot_clef(FILE *);
 void recherche_mot_clef(FILE*);   
 void supprimer_mot_clef(FILE*);
 
-void saisie_DT_Obj(FILE*, DONNEE*,FILE*,FILE*,int,char*);  //fonction pour saisir les caractéristisques du mail (emetteur destinataire obj...)
-int rechercher_EM(FILE*,char*);
-void viderBuffer();
-int lire(char *chaine, int longueur);
-void recherche_mot(FILE *donne,FILE *mot_clef);
 
-void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* mail_utilisateur, char *nomrech);
+void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* mail_utilisateur, char *nomrech);//fonction pour saisir les caractéristisques du mail (emetteur destinataire obj...)
+void viderBuffer();
+int rechercher_EM(FILE*,char*);
+int lire(char *chaine, int longueur);

@@ -56,7 +56,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
                     case 4:
                         printf("Saisissez un nom a suprimer\n");
                         scanf("%s", nomrech);
-                        suprime_personne(repertoire, nomrech);
+                        supprime_personne(repertoire, nomrech);
                         break;
                     case 5:
                         ajout_mot_clef(motclef); //Pas besoin de mettre &tab_mot_clef
@@ -143,7 +143,7 @@ int rechercher_personne(FILE *repertoire, char *nomrech)
     }
     return trouve;
 }
-void suprime_personne(FILE *fichier, char *nomrech)
+void supprime_personne(FILE *fichier, char *nomrech)
 {
     PERS p;
     int indicateur=0;
@@ -171,12 +171,11 @@ void suprime_personne(FILE *fichier, char *nomrech)
     rename("temp.txt","repertoire.txt");
 }
 
-/*Cette fonction a pour but d'ajouter un mot clef 
- * et sa réponse associé à notre fichier mot_clef.txt
- * 
- */
-void ajout_mot_clef(FILE *fichier) 
+
+void ajout_mot_clef(FILE *fichier)
 {
+    /*Cette fonction a pour but d'ajouter un mot clef
+ * et sa réponse associé à notre fichier mot_clef.txt*/
 	MOT_CLEF tab_mot_clef;
 	printf("Veuillez saisir le mot-clef à ajouter (MOINS DE 30 CARACTERES): ");
     getchar();
@@ -303,49 +302,6 @@ void supprimer_mot_clef(FILE * fichier)
 
 }
 
-
-
-/*void saisie_DT_Obj(FILE *donne, DONNEE* mail_utilisateur,FILE *repertoire,FILE *motclef, int recherche,char *nomrech)
-{
-    printf ("Veuillez saisir votre adresse mail : \n");
-    getchar (); //vider le buffer
-    lire(mail_utilisateur->EM,TCHAINE);
-    printf ("Veuillez saisir l'adresse mail de votre destinataire : \n");
-    lire(mail_utilisateur->DT,TCHAINE);
-    printf ("Entrez l'objet du mail : \n");
-    lire(mail_utilisateur->OBJ,TCHAINE);
-    printf ("Entrez le message : \n");
-    lire(mail_utilisateur->CORPS,TMAX);
-    donne=fopen("donne.txt","a+");
-    fprintf(donne,"\n%s \n%s \n%s \n%s\n",mail_utilisateur->EM,mail_utilisateur->DT,mail_utilisateur->OBJ ,mail_utilisateur->CORPS);
-    strcpy(nomrech, mail_utilisateur->EM);
-    recherche=rechercher_EM(repertoire,nomrech);
-    //recherche_mot(donne,motclef);
-    fclose(donne);
-}*/
-
-int rechercher_personne(FILE *repertoire, char *nomrech)
-{
-    int trouve = 0;
-    char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
-    PERS p;
-    repertoire = fopen("repertoire.txt", "a+");
-    fseek(repertoire, 0, SEEK_SET);
-
-    while (fscanf(repertoire, "%s %s %s %s", p.NOM, p.PRENOM, p.AdresseMail, classement_temp) != EOF)
-    {
-        if (strcmp(p.NOM, nomrech) == 0)
-        {
-            strcpy(p.Classement, classement_temp);
-            printf("\nAffichage de la structure: Nom=%s, Prenom=%s, AdresseMail=%s, Classement=%s", p.NOM, p.PRENOM, p.AdresseMail, p.Classement);
-            trouve = (strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
-            fclose(repertoire);
-            return trouve;
-        }
-    }
-    return trouve;
-}
-
 int rechercher_EM(FILE *repertoire, char *nomrech)
 {
     int trouve=0;
@@ -401,57 +357,7 @@ int lire(char *chaine, int longueur) // Fonction pour palier au Pb de Retour Cha
         return 0;
     }
 }
-/*void recherche_mot(FILE *donne,FILE *motclef)
-{
-    int trouve=0;
-    char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
-    char mot_trouve[TMAX];
-    MOT_CLEF p;
-    DONNEE mail_utilisateur;
-    int i=0;
-    int cpt=0;
-    while (mail_utilisateur.CORPS !='\0')                                           //fonction pour compter le nbre de mot dans la  Corps de mail
-    {                                                                               //
-                                                                                    //
-        if (mail_utilisateur.CORPS ==' '){                                          //
-            while((mail_utilisateur.CORPS ==' ') && (mail_utilisateur.CORPS !='\0')){   //
-                                                                                       //
-                if(mail_utilisateur.CORPS !=' ')
-                {cpt++;}                            //
-            }                                                                       //
-        }                                                                           //
-        i++;                                                                        //
-    } 
-    printf("%d",cpt);    
-                                                                              
-    motclef=fopen("mot_clef.txt","a+");
-    donne=fopen("donne.txt","a+");
-    fseek(motclef, 0, SEEK_SET);
-    fseek(donne, 0, SEEK_SET);
 
-    while (fscanf(motclef,"%s %s", p.mot, p.annexe_mot) !=EOF)
-    {
-        while(fscanf(donne,"%s %s %s %s",mail_utilisateur.EM, mail_utilisateur.DT, mail_utilisateur.OBJ, mail_utilisateur.CORPS) != EOF)
-        {    
-            for (i=0; i<= cpt; i++)
-            {    
-                if (strstr(mail_utilisateur.CORPS,p.mot)==0)
-                {
-                    mot_trouve[i]=p.annexe_mot[i];
-                    printf("\nProfil reconnu !\n");
-                    trouve=(strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer
-                    fclose(motclef);
-                    
-                    return trouve;
-                }
-            }
-        }                    
-    }
-printf(" reponse: %s", p.annexe_mot);
-
-fclose(motclef);
-
-}*/
 void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* mail_utilisateur, char *nomrech)
 {
 	MOT_CLEF p;
