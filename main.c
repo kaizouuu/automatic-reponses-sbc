@@ -7,14 +7,14 @@
 
 int main()
 {
-    char nomrech[100];
-    int recherche;
+    char nomrech[TCHAINE];
+    int recherche=-1;
     PERS p;
     DONNEE mail_utilisateur;
     FILE * repertoire=NULL;
     FILE * donnee=NULL;
     FILE * motclef=NULL;
-    menu(repertoire,donnee,motclef,&p,&mail_utilisateur,nomrech,&recherche);
+    menu(repertoire,donnee,motclef,&p,&mail_utilisateur,nomrech,recherche);
 
     return 0;
 }
