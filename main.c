@@ -21,24 +21,3 @@ int main()
 
 
 
-
-
-
-/*void cherche_dans_un_fichier(FILE *donne)
-{
-    char chaine[TAILLE_MAX] = ""; // Chaîne vide de taille TAILLE_MAX
-
-    donne = fopen("test.txt", "r");
-
-    if (donne != NULL)
-    {
-        fgets(chaine, TAILLE_MAX, donne); // On lit maximum TAILLE_MAX caractères du fichier, on stocke le tout dans "chaine"
-        printf("%s", chaine); // On affiche la chaîne
-
-        fclose(donne);
-    }
-
-    return 0;
-}*/
-
-
