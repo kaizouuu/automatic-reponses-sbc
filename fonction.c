@@ -50,10 +50,10 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
                     switch (i)
                     {
                     case 0:
-						goto menu;
+						goto menu; //Ce goto nous permet de retourner sur le premier menu
                         break;
                     case 1:
-                        saisir_repertoire(repertoire, p); //Pas besoin de mettre &p ici. Pouquoi ? Aucune idée. A investiguer
+                        saisir_repertoire(repertoire, p); 
                         break;
                     case 2:
                         affichage_repertoire(repertoire);
@@ -69,7 +69,7 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
                         supprime_personne(repertoire, nomrech);
                         break;
                     case 5:
-                        ajout_mot_clef(motclef); //Pas besoin de mettre &tab_mot_clef
+                        ajout_mot_clef(motclef); 
                         break;
                     case 6:
                         afficher_mot_clef(motclef);
@@ -113,8 +113,8 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
 
 void saisir_repertoire(FILE *repertoire, PERS *p)
 {
-    /*
-     * Cette fonction repuère les informations (nom, prenom, adresse mail et Clasmment)
+    
+    /* Cette fonction repuère les informations (nom, prenom, adresse mail et Clasmment)
      * Elle recupère exactement les informations taper au clavier avec la fonction Lire
      * Elle ouvre et ferme le fichier pour stocker les informations
      */
@@ -134,8 +134,7 @@ void saisir_repertoire(FILE *repertoire, PERS *p)
 
 void affichage_repertoire(FILE *repertoire)
 {
-    /*
-     * Cette fonction vient faire une boucle sur le repertoire pour afficher la stucture
+    /* Cette fonction vient faire une boucle sur le repertoire pour afficher la stucture
      * Elle ouvert le fichier et le ferme en fin de Lecture
      */
     PERS p;
@@ -150,8 +149,7 @@ void affichage_repertoire(FILE *repertoire)
 
 int rechercher_personne(FILE *repertoire, char *nomrech)
 {
-    /*
-     * Cette fonction prend en parametre un nom à rechercher
+    /* Cette fonction prend en parametre un nom à rechercher
      * Elle vient lire toutes les chaine de caractere contenu dans le fichier
      * Elle compare tout les nom au parametre passer en entre
      * Si il sont égaux affiche la structure associer
@@ -186,8 +184,11 @@ int rechercher_personne(FILE *repertoire, char *nomrech)
 
 void supprime_personne(FILE *fichier, char *nomrech)
 {
-    /*
-     *
+    /* Cette fonction nous permet de supprimer une personne de notre répertoire.
+     * Pour cela on saisie le nom de la personne à supprimer.
+     * On va ensuite comparer chaque contact avec ce nom, si le contact n'est pas le bon il est recopié dans un fichier temporaire
+     * Si le contact est le bon alors il ne sera pas recopié. Ainsi, nous pouvons supprimé le premier fichier et garder le second
+     * qui ne comporte pas la personne saisie
      */
     PERS p;
     int indicateur=0;
@@ -196,41 +197,41 @@ void supprime_personne(FILE *fichier, char *nomrech)
     FILE * fichier_temp=NULL;
     fichier_temp=fopen("temp.txt","w+");
 
-    while (fscanf(fichier,"%s %s %s %s", p.NOM, p.PRENOM,p.AdresseMail,p.Classement) !=EOF)
+    while (fscanf(fichier,"%s %s %s %s", p.NOM, p.PRENOM,p.AdresseMail,p.Classement) !=EOF) //On charge les élements du fichier répertoire dans notre structure PERS afin de faire la comparaison
     {
-        if (strcmp(p.NOM,nomrech)!=0)
+        if (strcmp(p.NOM,nomrech)!=0) //Comparaison entre le nom de la personne à supprimer et le nom actuellement dans la structure PERS
         {
-            fprintf(fichier_temp, "\n%-20s %10s %10s %10s", p.NOM, p.PRENOM,p.AdresseMail,p.Classement);
+            fprintf(fichier_temp, "\n%-20s %10s %10s %10s", p.NOM, p.PRENOM,p.AdresseMail,p.Classement); //Si ce n'est pas la bonne personne, on la recopie dans le nouveau fichier
         }
         else
         {
-            indicateur=1;
+			printf("\nPersonne supprimée de notre répertoire.\n");
+            indicateur=1; //Nous permet de savoir si la personne à été trouvé et ignoré (non recopié dans le nouveau fichier)
         }
     }
     if(indicateur==0)
         printf("\nErreur: Cette personne n'existe pas.\n");
-    fclose(fichier);
+    fclose(fichier); 
     fclose(fichier_temp);
-    remove("repertoire.txt");
-    rename("temp.txt","repertoire.txt");
+    remove("repertoire.txt");              //On supprime le vieux fichier
+    rename("temp.txt","repertoire.txt");   //On renome le nouveau fichier
 }
 
 
 void ajout_mot_clef(FILE *fichier)
 {
-    /*
-     * Cette fonction a pour but d'ajouter un mot clef
-     * et sa réponse associé à notre fichier mot_clef.txt
+    /* Cette fonction a pour but d'ajouter un mot clef et sa réponse associée à notre fichier mot_clef.txt
+     * Pour cela nous utilisons la structure MOT_CLEF pour stocker ce que l'on saisie avant de l'ajouter à notre fichier 
      */
 	MOT_CLEF tab_mot_clef;
-	printf("Veuillez saisir le mot-clef à ajouter (MOINS DE 30 CARACTERES): ");
+	printf("Veuillez saisir le mot-clef à ajouter (MOINS DE 30 CARACTERES): ");     //On saisie le mot-clef
     getchar();
-	lire(tab_mot_clef.mot,TMOT);
-	printf("\nVeuillez saisir la réponse appropriée (PLUS DE 30 CARACTERES): ");
+	lire(tab_mot_clef.mot,TMOT);                                                  
+	printf("\nVeuillez saisir la réponse appropriée (PLUS DE 30 CARACTERES): ");    //On saisie la réponse associée
 	lire(tab_mot_clef.reponse,TMAX);
 	fichier=fopen("mot_clef.txt","a+");
 	fseek(fichier, 0, SEEK_END);
-	fprintf(fichier,"\n%s\n%s\n",tab_mot_clef.mot, tab_mot_clef.reponse);
+	fprintf(fichier,"\n%s\n%s\n",tab_mot_clef.mot, tab_mot_clef.reponse);           //On recopie le contenue de notre structure dans le fichier
     fclose(fichier);
 }
 
@@ -248,7 +249,7 @@ void afficher_mot_clef(FILE * fichier)
     printf("\n\nAffichage des mot-clefs et des réponses associées: \n");
 
     car = fgetc(fichier);                   //On commence à lire le fichier caractère par caractère
-	while (car != EOF)    //Tant que le caractère lu n'est pas la fin du fichier, on continue 
+	while (car != EOF)                      //Tant que le caractère lu n'est pas la fin du fichier, on continue 
 	{
 		printf ("%c", car);     //On afficher le caractère stocké
 		car = fgetc(fichier);   //On lit le caractère suivant
@@ -268,41 +269,42 @@ void recherche_mot_clef(FILE *fichier)
     MOT_CLEF p;
 	char mot_recherche[TMOT];
 	char ligne[TMAX];
-	int indicateur=0;
+	int indicateur=0;                                                   //Nous permettra de savoir si le mot-clef n'existe pas
 	printf("\n\nEntrez le mot-clef recherché (MOINS DE 30 CARACTERES): ");
 	scanf("%s", mot_recherche);
 	fichier=fopen("mot_clef.txt","a+");
 	fseek(fichier, 0, SEEK_SET);
 	
 	ici:
-	while(fgets(ligne,TMAX,fichier)!=NULL)
+	while(fgets(ligne,TMAX,fichier)!=NULL)  //Tant que le fichier n'est pas fini on copie la ligne actuelle avec fgets
 	{	
-		if (ligne[0]=='\n')
+		if (ligne[0]=='\n')                 //Cette boule if nous permet d'ignorer les lignes vides (les sauts de ligne)
 		{
-			goto ici;
+			goto ici;                       //Ce goto nous permet de repartir de zéro dans cette boucle une fois la ligne vide ignorée
 		}
 		else
 		{
-			sscanf(ligne,"%s",p.mot);
-			fgets(p.reponse,TMAX,fichier);
-			if (strcmp(p.mot,mot_recherche)==0)
+			sscanf(ligne,"%s",p.mot);               //sscanf nous permet de charger la ligne dans notre structure MOT_CLEF en tant que mot
+			fgets(p.reponse,TMAX,fichier);          //Nous permet de lire la ligne suivante et de la stocker dans notre structure en tant que réponse (notre fichier est agencé de cette manière)
+			if (strcmp(p.mot,mot_recherche)==0)     //Si il y a égalité entre le mot recherché et le mot actuel...
 			{
-				indicateur=1;
-				printf("\nMot-clef: %s\nReponse: %s\n",p.mot,p.reponse);
-			
+				indicateur=1;                            
+				printf("\nMot-clef: %s\nReponse: %s\n",p.mot,p.reponse);  //...alors on l'affiche à l'écran			
 			}
 		}
 	}
-	
 	if (indicateur==0)
 		printf("\nCe mot-clef n'existe pas !\n");
-	fclose(fichier);
-	
-	
+	fclose(fichier);	
 }
 
 void supprimer_mot_clef(FILE * fichier)
 {
+	/* Cette fonction marche selon le même principe que la fonction supprime_personne
+	 * On saisie le mot clef à supprimer et on le compare avec les mot-clefs que l'on chargera un à un dans un structure MOT_CLEF
+	 * Si ce n'est pas le bon mot clef, on recopie la structure (mot et réponse) dans un nouveau fichier
+	 * Si c'est le bon mot_clef il ne sera pas recopié et sera perdu dans les limbes pour toujours !!!! >:-)
+	 */
 	MOT_CLEF p;
 	char mot_a_supprimer[TMAX];
 	int indicateur=0;
@@ -315,25 +317,25 @@ void supprimer_mot_clef(FILE * fichier)
 	fichier_temp=fopen("temp.txt","w+");
 	
 	retour:
-	while(fgets(ligne,TMAX,fichier)!=NULL)
+	while(fgets(ligne,TMAX,fichier)!=NULL)          //On place la ligne actuelle dans la chaine "ligne" grâce à fgets tant que le fichier n'est pas fini 
 	{	
-		if (ligne[0]=='\n')
+		if (ligne[0]=='\n')                         //Cette boucle if permet de recopier les sauts de ligne
 		{
-			fprintf(fichier_temp,"\n");
+			fprintf(fichier_temp,"\n");             //Ici on remet le saut de ligne dans le nouveau fichier
 		}
 		else
 		{
-			sscanf(ligne,"%s",p.mot);
-			fgets(p.reponse,TMAX,fichier);
-			if (strcmp(p.mot,mot_a_supprimer)==0)
+			sscanf(ligne,"%s",p.mot);               //On place notre ligne dans la structre MOT_CLEF pour faire une comparaison
+			fgets(p.reponse,TMAX,fichier);          //On place la ligne suivante dans la structure en tant que réponse (c'est comme cela qu'est agencé notre fichier)
+			if (strcmp(p.mot,mot_a_supprimer)==0)   //On compare nos deux chaines de caractères
 			{
-				indicateur=1;
-				fgets(p.reponse,TMAX,fichier);
-				goto retour;
+				indicateur=1;                       
+				printf("\nMot-clef supprimé.\n");   //Ici on ne recopie pas la structure dans le nouveau fichier
+				goto retour;                        //On retourne au début de la boucle while
 			}
 			else
 			{
-				fprintf(fichier_temp, "%s\n%s",p.mot,p.reponse);
+				fprintf(fichier_temp, "%s\n%s",p.mot,p.reponse);   //On recopie la structure dans le nouveau fichier
 			}
 		}
 	}
@@ -344,8 +346,8 @@ void supprimer_mot_clef(FILE * fichier)
 	
 	fclose(fichier);
 	fclose(fichier_temp);
-	remove("mot_clef.txt");
-	rename("temp.txt","mot_clef.txt");
+	remove("mot_clef.txt");                  //On supprime le premier fichier
+	rename("temp.txt","mot_clef.txt");       //On renomme le second fichier
 
 }
 
@@ -406,6 +408,11 @@ int lire(char *chaine, int longueur) // Fonction pour palier au Pb de Retour Cha
 
 void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* mail_utilisateur, char *nomrech)
 {
+	/* Cette fonction du mode utilisateur permet non seulement de saisir un mail, mais aussi d'y répondre en remplissant notre fichier donne.txt
+	 *  Nous regardons d'abord si l'addresse mail entrée correspond à l'un des membres dans notre répertoire
+	 * Si oui l'utilisateur peut entrer un objet et un corps de mail. On recopie le tout dans notre fichier donne.txt
+	 * On lit ensuite le fichier mot clef et on place chaque mot clef et sa réponse associée dans une structure
+	 */
 	MOT_CLEF p;
     donne=fopen("donne.txt","a+");
     motclef=fopen("mot_clef.txt","a+");
@@ -416,7 +423,7 @@ void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* 
    
    
     printf ("Veuillez saisir votre adresse mail : \n");
-    getchar ();                                                                                 //vider le buffer
+    getchar ();                                                                              
     lire(mail_utilisateur->EM,TCHAINE);
     trouve=rechercher_EM(repertoire, mail_utilisateur->EM);
     
@@ -437,16 +444,16 @@ void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* 
 			arriere:
 			while(fgets(ligne,TMAX,motclef)!=NULL)
 			{	
-				if (ligne[0]=='\n')
+				if (ligne[0]=='\n')                                       //Cas ou nous rencontrons une ligne vide dans le fichier mot_clef
 				{
-					goto arriere;
+					goto arriere;                                         //On se contente de recommencer la boucle while avec une nouvelle ligne
 				}
 				else
 				{
 					sscanf(ligne,"%s",p.mot);
 					fgets(p.reponse,TMAX,motclef);
-					if (strstr(mail_utilisateur->CORPS,p.mot)!=NULL)
-					{
+					if (strstr(mail_utilisateur->CORPS,p.mot)!=NULL)      //Si mon corps de mail reçu contient le mot-clef recherché, alors on peut répondre
+					{                                                     //Ici on affichera à la fois sur le terminal et dans notre fichier donne.txt
 						indicateur=1;
 						
 						printf("\nMail automatique de reponse: ");
@@ -455,19 +462,19 @@ void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* 
 						printf("\nExpediteur: club.sbc@gmail.com");
 						fprintf(donne, "\nExpediteur: club.sbc@gmail.com");
 						
-						printf("\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
+						printf("\nObjet: Reponse a: %s", mail_utilisateur->OBJ);          //On recopie l'objet
 						fprintf(donne, "\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
 						
-						printf("\nCorps: %s\n\n", p.reponse);
+						printf("\nCorps: %s\n\n", p.reponse);                             //On affiche notre réponse associée contenue dans notre fichier mot-clef
 						fprintf(donne,"\nCorps: %s", p.reponse);
 						
-						printf("\nHistorique des mails disponibles dans le fichier \"donne.txt\"\n");
+						printf("\nHistorique des mails disponibles dans le fichier \"donne.txt\"\n");  //Petite ligne d'information
 					}
 				}
 			} 
       }
 		
-	if (indicateur==0)
+	if (indicateur==0)  //C'est dans le cas ou nous ne trouvons aucun mot-clef dans le texte reçu.
 	{
 		printf("\nMail automatique de reponse: ");
 		fprintf(donne, "\nMail automatique de reponse: ");
