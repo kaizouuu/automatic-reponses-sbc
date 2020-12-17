@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "fonction.h"
-//void cherche_dans_un_fichier(FILE*);
-
 
 int main()
 {
@@ -18,6 +16,3 @@ int main()
 
     return 0;
 }
-
-
-

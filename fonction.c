@@ -5,6 +5,9 @@
 
 void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_utilisateur, char *nomrech, int recherche)
 {
+    /*
+     * Menu principale de lancement des fonctions
+     */
     char mdp_admin[TCHAINE] = "mdp";
     int i;
     int v;
@@ -13,6 +16,9 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
     do
     {
         printf("********** Bienvenu dans le promgramme de reponse automatique du SBC ***********\n");
+        /*
+         * Choix du mode
+         */
         printf("0 pour le mode administrateur\n");
         printf("1 pour le mode utilisateur\n");
         printf("2 sortir du programme\n");
@@ -26,6 +32,9 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
             {
                 do
                 {
+                    /*
+                     * Choix adminitrateur
+                     */
                     printf("\n********** VOUS ETES DANS LE MODE ADMINISTATEUR **********\n");
                     printf(" 0 pour retourner au premier menu\n");
                     printf(" 1 pour inserer une personne dans le repertoire\n");
@@ -84,10 +93,16 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
             }
 
             case 1:
+                /*
+                 * Lancement de l'aplication utilisateur
+                 */
                 printf ("\n********** VOUS ETES DANS LE MODE UTILISATEUR **********\n");
                 fonction_utilisateur(donnee, repertoire, motclef, mail_utilisateur, nomrech);
                 break;
             case 2:
+                /*
+                 * Sortir du programme
+                 */
                 printf ("\n********** AU REVOIR **********\n\n");
                 exit(0);
                 break;
@@ -98,8 +113,13 @@ void menu(FILE *repertoire, FILE *donnee, FILE *motclef, PERS *p, DONNEE *mail_u
 
 void saisir_repertoire(FILE *repertoire, PERS *p)
 {
+    /*
+     * Cette fonction repuère les informations (nom, prenom, adresse mail et Clasmment)
+     * Elle recupère exactement les informations taper au clavier avec la fonction Lire
+     * Elle ouvre et ferme le fichier pour stocker les informations
+     */
 	printf("Entrez le prenom de cette personne : \n");
-	getchar();
+	getchar(); /*Vider buffer*/
     lire(p->PRENOM,TCHAINE);
     printf("Entrez le nom de la personne de votre choix: \n");
     lire(p->NOM,TCHAINE);
@@ -111,8 +131,13 @@ void saisir_repertoire(FILE *repertoire, PERS *p)
     fprintf(repertoire, "\n%s \n%s \n%s \n%s", p->NOM, p->PRENOM, p->AdresseMail, p->Classement);
     fclose(repertoire);
 }
+
 void affichage_repertoire(FILE *repertoire)
 {
+    /*
+     * Cette fonction vient faire une boucle sur le repertoire pour afficher la stucture
+     * Elle ouvert le fichier et le ferme en fin de Lecture
+     */
     PERS p;
     repertoire = fopen("repertoire.txt", "a+");
     printf("\nAffichage du répertoire: \n");
@@ -122,8 +147,16 @@ void affichage_repertoire(FILE *repertoire)
     }
     fclose(repertoire);
 }
+
 int rechercher_personne(FILE *repertoire, char *nomrech)
 {
+    /*
+     * Cette fonction prend en parametre un nom à rechercher
+     * Elle vient lire toutes les chaine de caractere contenu dans le fichier
+     * Elle compare tout les nom au parametre passer en entre
+     * Si il sont égaux affiche la structure associer
+     * Sinon affiche l'adhérent n'existe pas
+     */
     int trouve = 0;
     int indicateur=0;
     char classement_temp[TMAX]; // servira a stocker la chaine de caractere representant le num de la structure
@@ -150,8 +183,12 @@ int rechercher_personne(FILE *repertoire, char *nomrech)
     
     return trouve;
 }
+
 void supprime_personne(FILE *fichier, char *nomrech)
 {
+    /*
+     *
+     */
     PERS p;
     int indicateur=0;
     fichier=fopen("repertoire.txt","a+");
@@ -181,8 +218,10 @@ void supprime_personne(FILE *fichier, char *nomrech)
 
 void ajout_mot_clef(FILE *fichier)
 {
-    /*Cette fonction a pour but d'ajouter un mot clef
- * et sa réponse associé à notre fichier mot_clef.txt*/
+    /*
+     * Cette fonction a pour but d'ajouter un mot clef
+     * et sa réponse associé à notre fichier mot_clef.txt
+     */
 	MOT_CLEF tab_mot_clef;
 	printf("Veuillez saisir le mot-clef à ajouter (MOINS DE 30 CARACTERES): ");
     getchar();
@@ -195,12 +234,13 @@ void ajout_mot_clef(FILE *fichier)
     fclose(fichier);
 }
 
-/*Cette fonction a pour but d'afficher tous les mot-clefs ainsi que les réponses associées
- * contenues dans mot_clef.txt. Ici on se contentera de recopier le fichier sur la sortie terminal
- * caractère par caractères en utilisant fgetc
- */
 void afficher_mot_clef(FILE * fichier) 
-{	
+{
+    /*
+     * Cette fonction a pour but d'afficher tous les mot-clefs ainsi que les réponses associées
+     * contenues dans mot_clef.txt. Ici on se contentera de recopier le fichier sur la sortie terminal
+     * caractère par caractères en utilisant fgetc
+     */
 	char car;                                    //variable stockant le caractère "actuel"
 	fichier=fopen("mot_clef.txt","a+");          //ouverture du fichier
 	fseek(fichier, 0, SEEK_SET);
@@ -218,13 +258,13 @@ void afficher_mot_clef(FILE * fichier)
 	printf("\n\n");
 }
 
-     /*Cette fonction a pour but de rechercher un mot en lisant le fichier
-	 * D'abord on demande le mot recherché à l'utilisateur
-	 * Ensuite on lit le fichier et on rentre chaque mot-clef et son annexe dans une structure
-	 * On effectue la comparaision et on affiche si nécessaire
-	 */
 void recherche_mot_clef(FILE *fichier)
 {
+    /*Cette fonction a pour but de rechercher un mot en lisant le fichier
+    * D'abord on demande le mot recherché à l'utilisateur
+    * Ensuite on lit le fichier et on rentre chaque mot-clef et son annexe dans une structure
+    * On effectue la comparaision et on affiche si nécessaire
+    */
     MOT_CLEF p;
 	char mot_recherche[TMOT];
 	char ligne[TMAX];
@@ -444,4 +484,3 @@ void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* 
 	fclose(motclef);
     fclose(donne);
 }
-
