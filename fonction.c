@@ -358,10 +358,10 @@ int rechercher_EM(FILE *repertoire, char *nomrech)
     PERS p;
     repertoire=fopen("repertoire.txt","a+");
     fseek(repertoire, 0, SEEK_SET);
-    while (fscanf(repertoire,"%s %s %s %s", p.NOM, p.PRENOM,p.AdresseMail, classement_temp) !=EOF)
-    {
+    while (fscanf(repertoire,"%s %s %s %s", p.NOM, p.PRENOM,p.AdresseMail, classement_temp) !=EOF)  
+    {       //tant que l'on atteind pas la fin du repertoire on affecte les chaines de caractères aux variables
         
-        if (strcmp(p.AdresseMail,nomrech)==0)
+        if (strcmp(p.AdresseMail,nomrech)==0)       //test si p.adressemail= nomrech
         {
             strcpy(p.Classement,classement_temp);
             trouve=(strlen(classement_temp)); //determine la taille de la chaine de caractere num_temp pour la retourner et connaitre le nombre d'octect pour se deplacer

@@ -42,6 +42,6 @@ void supprimer_mot_clef(FILE*);    //Supprime un mot-clef particulier
 //Cette fonction du mode utilisateur permet non seulement de saisir un mail, mais aussi d'y répondre en remplissant notre fichier donne.txt
 void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* mail_utilisateur, char *nomrech);
 
-void viderBuffer();
-int rechercher_EM(FILE*,char*);
-int lire(char *chaine, int longueur);
+void viderBuffer();                     //vide le buffer pour pouvoir utiliser lire()
+int rechercher_EM(FILE*,char*);         //recherche le nom d'un profil parmis le repertoire
+int lire(char *chaine, int longueur);   //lis une chaine de caractères avec espaces est la stockdans une variable 
