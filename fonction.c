@@ -373,7 +373,7 @@ int rechercher_EM(FILE *repertoire, char *nomrech)
     return trouve;
 }
 
-void viderBuffer()
+void viderBuffer()  //fonction pour vider stdin
 {
     int c = 0;
     while (c != '\n' && c != EOF)
@@ -388,7 +388,7 @@ int lire(char *chaine, int longueur) // Fonction pour palier au Pb de Retour Cha
 
     if (fgets(chaine, longueur, stdin) != NULL)
     {
-        positionEntree = strchr(chaine, '\n');
+        positionEntree = strchr(chaine, '\n'); // cherche le caractère \n
         if (positionEntree != NULL)
         {
             *positionEntree = '\0';
@@ -465,8 +465,8 @@ void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* 
 						printf("\nObjet: Reponse a: %s", mail_utilisateur->OBJ);          //On recopie l'objet
 						fprintf(donne, "\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
 						
-						printf("\nCorps: %s\n\n", p.reponse);                             //On affiche notre réponse associée contenue dans notre fichier mot-clef
-						fprintf(donne,"\nCorps: %s", p.reponse);
+						printf("\nCorps: %s\n Cordialement,\n Le SBC.\n\n", p.reponse);                             //On affiche notre réponse associée contenue dans notre fichier mot-clef
+						fprintf(donne,"\nCorps: %s \n Cordialement,\n Le SBC.", p.reponse);
 						
 						printf("\nHistorique des mails disponibles dans le fichier \"donne.txt\"\n");  //Petite ligne d'information
 					}
