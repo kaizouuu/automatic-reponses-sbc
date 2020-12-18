@@ -466,7 +466,7 @@ void fonction_utilisateur(FILE *donne, FILE *repertoire, FILE *motclef, DONNEE* 
 						fprintf(donne, "\nObjet: Reponse a: %s", mail_utilisateur->OBJ);
 						
 						printf("\nCorps: %s\n Cordialement,\n Le SBC.\n\n", p.reponse);                             //On affiche notre réponse associée contenue dans notre fichier mot-clef
-						fprintf(donne,"\nCorps: %s \n Cordialement,\n Le SBC.", p.reponse);
+						fprintf(donne,"\nCorps: %s  Cordialement, Le SBC.", p.reponse);
 						
 						printf("\nHistorique des mails disponibles dans le fichier \"donne.txt\"\n");  //Petite ligne d'information
 					}
